@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vuducvinh Premium Shop</title>
+    <style>
+        :root {
+            --pink-main: #ffafbd;
+            --pink-dark: #ff85a1;
+            --glass: rgba(255, 255, 255, 0.9);
+            --pink-light: #ffeef2;
+        }
+
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: var(--pink-light);
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .shop-box {
+            width: 350px;
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            border-radius: 40px;
+            padding: 25px;
+            border: 3px solid #fff;
+            box-shadow: 0 15px 35px rgba(255, 175, 189, 0.4);
+            text-align: center;
+            position: relative;
+        }
+
+        .kitty-logo {
+            width: 80px;
+            margin-bottom: 10px;
+        }
+
+        .header h2 {
+            color: var(--pink-dark);
+            margin: 0 0 20px 0;
+            font-size: 22px;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .auth-container { display: none; }
+        .auth-container.active { display: block; }
+        .shop-content { display: none; }
+
+        .input-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 20px;
+            border: 2px solid var(--pink-main);
+            outline: none;
+            box-sizing: border-box;
+            background: rgba(255, 255, 255, 0.8);
+            color: #555;
+        }
+
+        input:focus { border-color: var(--pink-dark); }
+
+        .btn-main {
+            width: 100%;
+            background: var(--pink-dark);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            box-shadow: 0 4px 10px rgba(255, 133, 161, 0.3);
+            transition: 0.3s;
+        }
+
+        .switch-auth {
+            font-size: 13px;
+            margin-top: 15px;
+            color: #777;
+        }
+
+        .switch-auth span {
+            color: var(--pink-dark);
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .nav-bubbles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 25px; }
+        .nav-bubbles a { text-decoration: none; background: #fff; aspect-ratio: 1/1; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 5px 15px rgba(255, 133, 161, 0.2); transition: 0.3s; }
+        .nav-bubbles a span { font-size: 18px; display: block; }
+        .nav-bubbles a b { font-size: 9px; font-weight: bold; color: var(--pink-dark); margin-top: 4px; text-transform: uppercase; }
+        
+        .scroll-area { background: rgba(255, 255, 255, 0.6); border-radius: 30px; padding: 15px; max-height: 350px; overflow-y: auto; text-align: left; }
+        .scroll-area::-webkit-scrollbar { width: 0; }
+        
+        .category-header { background: var(--pink-main); color: white; padding: 8px 15px; border-radius: 15px; font-size: 13px; font-weight: bold; margin: 20px 0 10px 0; }
+        .category-header:first-child { margin-top: 0; }
+
+        .item-card { background: rgba(255, 255, 255, 0.9); margin-bottom: 10px; padding: 12px 15px; border-radius: 20px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--pink-light); }
+        .item-info { font-size: 13px; color: #444; font-weight: 500; }
+        .btn-buy { background: var(--pink-dark); color: white; border: none; padding: 6px 12px; border-radius: 12px; font-size: 11px; font-weight: bold; cursor: pointer; }
+        
+        .logout-link { font-size: 12px; color: #aaa; text-decoration: none; display: block; margin-top: 15px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<div class="shop-box">
+    <img src="https://upload.wikimedia.org/wikipedia/en/0/05/Hello_kitty_character_portrait.png" class="kitty-logo" alt="Hello Kitty">
+
+    <div id="login-form" class="auth-container active">
+        <div class="header"><h2>ĐĂNG NHẬP</h2></div>
+        <div class="input-group"><input type="text" placeholder="Tên đăng nhập"></div>
+        <div class="input-group"><input type="password" placeholder="Mật khẩu"></div>
+        <button class="btn-main" onclick="handleLogin()">ĐĂNG NHẬP</button>
+        <div class="switch-auth">Chưa có tài khoản? <span onclick="toggleAuth('register')">Đăng ký</span></div>
+    </div>
+
+    <div id="register-form" class="auth-container">
+        <div class="header"><h2>ĐĂNG KÝ</h2></div>
+        <div class="input-group"><input type="text" placeholder="Tên đăng nhập mới"></div>
+        <div class="input-group"><input type="email" placeholder="Email"></div>
+        <div class="input-group"><input type="password" placeholder="Mật khẩu"></div>
+        <button class="btn-main" onclick="handleRegister()">TẠO TÀI KHOẢN</button>
+        <div class="switch-auth">Đã có tài khoản? <span onclick="toggleAuth('login')">Đăng nhập</span></div>
+    </div>
+
+    <div id="shop-content" class="shop-content">
+        <div class="header"><h2>VUDUCVINH SHOP</h2></div>
+        <div class="nav-bubbles">
+            <a href="#proxy"><span>🌐</span><b>PROXY</b></a>
+            <a href="#shadow"><span>🌑</span><b>SHADOW</b></a>
+            <a href="#cert"><span>📜</span><b>CERT</b></a>
+            <a href="#flu"><span>💉</span><b>FLU</b></a>
+        </div>
+        
+        <div class="scroll-area">
+            <div id="proxy" class="category-header">🌐 GÓI PROXY</div>
+            <div class="item-card"><span class="item-info">Proxy Ngày 🔑</span><button class="btn-buy">MUA</button></div>
+            <div class="item-card"><span class="item-info">Proxy Tuần 🔑</span><button class="btn-buy">MUA</button></div>
+            <div class="item-card"><span class="item-info">Proxy Tháng 🔑</span><button class="btn-buy">MUA</button></div>
+
+            <div id="shadow" class="category-header">🌑 GÓI SHADOW</div>
+            <div class="item-card"><span class="item-info">Shadow Vĩnh Viễn 🌙</span><button class="btn-buy">MUA</button></div>
+
+            <div id="cert" class="category-header">📜 GÓI CHỨNG CHỈ</div>
+            <div class="item-card"><span class="item-info">Chứng Chỉ Vĩnh Viễn 🏅</span><button class="btn-buy">MUA</button></div>
+
+            <div id="flu" class="category-header">💉 GÓI FLU</div>
+            <div class="item-card"><span class="item-info">Flu Tuần ⚡</span><button class="btn-buy">MUA</button></div>
+            <div class="item-card"><span class="item-info">Flu Tháng 🔥</span><button class="btn-buy">MUA</button></div>
+        </div>
+        
+        <div class="logout-link" onclick="showLogin()">Đăng xuất</div>
+    </div>
+</div>
+
+<script>
+    function toggleAuth(type) {
+        if (type === 'register') {
+            document.getElementById('login-form').classList.remove('active');
+            document.getElementById('register-form').classList.add('active');
+        } else {
+            document.getElementById('register-form').classList.remove('active');
+            document.getElementById('login-form').classList.add('active');
+        }
+    }
+
+    function handleRegister() {
+        alert("Đăng ký thành công! Mời bạn đăng nhập.");
+        toggleAuth('login');
+    }
+
+    function handleLogin() {
+        document.getElementById('login-form').classList.remove('active');
+        document.getElementById('shop-content').style.display = 'block';
+    }
+
+    function showLogin() {
+        document.getElementById('shop-content').style.display = 'none';
+        document.getElementById('login-form').classList.add('active');
+    }
+</script>
+
+</body>
+</html>
